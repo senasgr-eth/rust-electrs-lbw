@@ -311,9 +311,10 @@ impl PrivateKey {
     pub fn fmt_wif(&self, fmt: &mut dyn fmt::Write) -> fmt::Result {
         let mut ret = [0; 34];
         ret[0] = match self.network {
-            Network::Bitcoin => 176,
-            Network::Testnet => 176,
-            Network::Signet | Network::Regtest => 176,
+            Network::Bitcoin => 176,    // Lebowkis mainnet WIF prefix
+            Network::Testnet => 141,    // Lebowkis testnet WIF prefix
+            Network::Signet => 141,     // Use testnet prefix for signet
+            Network::Regtest => 153,    // Lebowkis regtest WIF prefix
         };
         ret[1..33].copy_from_slice(&self.inner[..]);
         let privkey = if self.compressed {
@@ -346,9 +347,9 @@ impl PrivateKey {
         };
 
         let network = match data[0] {
-            176 => Network::Bitcoin,
-            176 => Network::Regtest,
-            176 => Network::Testnet,
+            176 => Network::Bitcoin,    // Lebowkis mainnet WIF prefix
+            153 => Network::Regtest,    // Lebowkis regtest WIF prefix
+            141 => Network::Testnet,    // Lebowkis testnet WIF prefix
             x => {
                 return Err(Error::Base58(base58::Error::InvalidAddressVersion(x)));
             }

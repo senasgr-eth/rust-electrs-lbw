@@ -1,0 +1,9 @@
+[package]
+name = "test_lebowkis_addresses"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+
+[dependencies]
+bitcoin = { path = "../bitcoin" }

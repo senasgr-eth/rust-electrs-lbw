@@ -38,7 +38,7 @@ use secp256k1::{Secp256k1, Verification, XOnlyPublicKey};
 use crate::base58;
 use crate::blockdata::constants::{
     MAX_SCRIPT_ELEMENT_SIZE, PUBKEY_ADDRESS_PREFIX_MAIN, PUBKEY_ADDRESS_PREFIX_TEST,
-    SCRIPT_ADDRESS_PREFIX_MAIN, SCRIPT_ADDRESS_PREFIX_TEST,
+    SCRIPT_ADDRESS_PREFIX_MAIN, SCRIPT_ADDRESS_PREFIX_TEST, SCRIPT_ADDRESS_PREFIX_REGTEST,
 };
 use crate::blockdata::script::witness_program::WitnessProgram;
 use crate::blockdata::script::witness_version::WitnessVersion;
@@ -493,7 +493,8 @@ impl<V: NetworkValidation> Address<V> {
         };
         let p2sh_prefix = match self.network() {
             Network::Bitcoin => SCRIPT_ADDRESS_PREFIX_MAIN,
-            Network::Testnet | Network::Signet | Network::Regtest => SCRIPT_ADDRESS_PREFIX_TEST,
+            Network::Testnet | Network::Signet => SCRIPT_ADDRESS_PREFIX_TEST,
+            Network::Regtest => SCRIPT_ADDRESS_PREFIX_REGTEST,
         };
         let hrp = match self.network() {
             Network::Bitcoin => hrp::BC,
@@ -853,6 +854,8 @@ impl FromStr for Address<NetworkUnchecked> {
                 (Network::Testnet, Payload::ScriptHash(ScriptHash::from_slice(&data[1..]).unwrap())),
             PUBKEY_ADDRESS_PREFIX_REGTEST =>
                 (Network::Regtest, Payload::PubkeyHash(PubkeyHash::from_slice(&data[1..]).unwrap())),
+            SCRIPT_ADDRESS_PREFIX_REGTEST =>
+                (Network::Regtest, Payload::ScriptHash(ScriptHash::from_slice(&data[1..]).unwrap())),
             x => return Err(ParseError::Base58(base58::Error::InvalidAddressVersion(x))),
         };
 

@@ -205,13 +205,13 @@ pub struct Magic(pub [u8; 4]);
 
 impl Magic {
     /// Lebowkis mainnet network magic bytes.
-    pub const BITCOIN: Self = Self([0xf9, 0xbe, 0xb4, 0xd9]);
+    pub const BITCOIN: Self = Self([0xcc, 0xf1, 0xc0, 0xee]);
     /// Lebowkis testnet network magic bytes.
-    pub const TESTNET: Self = Self([0xf9, 0xbe, 0xb4, 0xd9]);
+    pub const TESTNET: Self = Self([0xfc, 0xc1, 0xb7, 0xdc]);
     /// Lebowkis signet network magic bytes.
-    pub const SIGNET: Self = Self([0xf9, 0xbe, 0xb4, 0xd9]);
+    pub const SIGNET: Self = Self([0xfc, 0xc1, 0xb7, 0xdc]);
     /// Lebowkis regtest network magic bytes.
-    pub const REGTEST: Self = Self([0xf9, 0xbe, 0xb4, 0xd9]);
+    pub const REGTEST: Self = Self([0xc0, 0xc0, 0xc0, 0xc0]);
 
     /// Create network magic from bytes.
     pub fn from_bytes(bytes: [u8; 4]) -> Magic { Magic(bytes) }
@@ -408,10 +408,10 @@ mod tests {
     #[test]
     fn magic_from_str() {
         let known_network_magic_strs = [
-            ("c0c0c0c0", Network::Bitcoin),
+            ("ccf1c0ee", Network::Bitcoin),
             ("fcc1b7dc", Network::Testnet),
-            ("fabfb5da", Network::Regtest),
-            ("0a03cf40", Network::Signet),
+            ("c0c0c0c0", Network::Regtest),
+            ("fcc1b7dc", Network::Signet),
         ];
 
         for (magic_str, network) in &known_network_magic_strs {
